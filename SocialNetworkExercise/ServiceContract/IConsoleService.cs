@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SocialNetworkExercise.Services
+namespace SocialNetworkExercise.Services.ServiceContract
 {
     public interface IConsoleService
     {

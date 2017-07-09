@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic; 
-using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;  
 using SocialNetworkExercise.Models;
 using SocialNetworkExercise.Enums;
 using System.Linq;
+using SocialNetworkExercise.Services.ServiceContract;
 
 namespace SocialNetworkExercise.Services
 {

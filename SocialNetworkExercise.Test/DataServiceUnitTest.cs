@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SocialNetworkExercise.Models;
 using SocialNetworkExercise.Services;
+using SocialNetworkExercise.Services.ServiceContract;
 using System.Collections.Generic;
 
 namespace SocialNetworkExercise.Test

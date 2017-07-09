@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SocialNetworkExercise.Models;
+using SocialNetworkExercise.Services.ServiceContract;
 
 namespace SocialNetworkExercise.Services
 {

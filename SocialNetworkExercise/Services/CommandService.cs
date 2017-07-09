@@ -1,4 +1,5 @@
 ﻿using SocialNetworkExercise.Models;
+using SocialNetworkExercise.Services.ServiceContract;
 using System;
 using System.Collections.Generic;
 

@@ -62,9 +62,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CommandService.cs" />
     <Compile Include="Services\DataService.cs" />
-    <Compile Include="Services\ICommandService.cs" />
-    <Compile Include="Services\IDataService.cs" />
-    <Compile Include="Services\IConsoleService.cs" />
+    <Compile Include="ServiceContract\ICommandService.cs" />
+    <Compile Include="ServiceContract\IDataService.cs" />
+    <Compile Include="ServiceContract\IConsoleService.cs" />
     <Compile Include="Services\ConsoleService.cs" />
   </ItemGroup>
   <ItemGroup>

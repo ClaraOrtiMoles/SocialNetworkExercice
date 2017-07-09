@@ -4,6 +4,7 @@ using SocialNetworkExercise.Services;
 using SocialNetworkExercise.Models;
 using System.Collections.Generic;
 using SocialNetworkExercise.Enums;
+using SocialNetworkExercise.Services.ServiceContract;
 
 namespace SocialNetworkExercise
 {

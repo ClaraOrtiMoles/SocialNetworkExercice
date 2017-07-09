@@ -3,11 +3,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AutoMoq;
 using SocialNetworkExercise.Services;
 using SocialNetworkExercise.Models;
+using SocialNetworkExercise.Services.ServiceContract;
 
 namespace SocialNetworkExercise.Test
 {
     [TestClass]
-    public class ConsoleUnitTest
+    public class CommandServiceUnitTest
     {
         [TestMethod]
         public void ConsoleServiceConvertMessageToCommand_Posting_ReturnsCommandUsernamePostingInfoMessage()

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using SocialNetworkExercise.Models;
 
-namespace SocialNetworkExercise.Services
+namespace SocialNetworkExercise.Services.ServiceContract
 {
     public interface ICommandService
     {
