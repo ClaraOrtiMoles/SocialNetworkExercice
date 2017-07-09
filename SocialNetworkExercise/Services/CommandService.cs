@@ -6,14 +6,13 @@ using System.Collections.Generic;
 namespace SocialNetworkExercise.Services
 {
     public class CommandService : ICommandService
-    {
-         
-        public string Following(User user, string userToFollow, Dictionary<string, User> data)
+    {         
+        public void Following(User user, string userToFollow, Dictionary<string, User> data)
         {
             throw new NotImplementedException();
         }
 
-        public string Posting(User user, string message, Dictionary<string, User> data)
+        public void Posting(User user, string message, Dictionary<string, User> data)
         {
             throw new NotImplementedException();
         }

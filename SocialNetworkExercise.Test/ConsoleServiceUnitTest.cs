@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AutoMoq;
 using SocialNetworkExercise.Services;
 using SocialNetworkExercise.Models;
@@ -21,8 +20,7 @@ namespace SocialNetworkExercise.Test
              
             ICommandService commandService = new CommandService();
             IDataService dataService = new DataService();
-            var ConsoleService = new ConsoleService(commandService, dataService);
-            string[] args = new string[0];
+            var ConsoleService = new ConsoleService(commandService, dataService); 
 
             //Action
             Command result = ConsoleService.ConvertMessageToCommand(commandMessage);
@@ -44,8 +42,7 @@ namespace SocialNetworkExercise.Test
 
             ICommandService commandService = new CommandService();
             IDataService dataService = new DataService();
-            var ConsoleService = new ConsoleService(commandService, dataService);
-            string[] args = new string[0];
+            var ConsoleService = new ConsoleService(commandService, dataService); 
 
             //Action
             Command result = ConsoleService.ConvertMessageToCommand(commandMessage);
