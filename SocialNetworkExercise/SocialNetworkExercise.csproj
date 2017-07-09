@@ -64,8 +64,8 @@
     <Compile Include="Services\DataService.cs" />
     <Compile Include="Services\ICommandService.cs" />
     <Compile Include="Services\IDataService.cs" />
-    <Compile Include="Services\IProgramService.cs" />
-    <Compile Include="Services\ProgramService.cs" />
+    <Compile Include="Services\IConsoleService.cs" />
+    <Compile Include="Services\ConsoleService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

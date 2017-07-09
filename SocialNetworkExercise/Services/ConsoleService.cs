@@ -6,21 +6,20 @@ using SocialNetworkExercise.Enums;
 
 namespace SocialNetworkExercise.Services
 {
-    public class ProgramService : IProgramService
+    public class ConsoleService : IConsoleService
     {
-        private readonly IServiceProvider _serviceProvider;
+      
         private readonly ICommandService _commandService;
         private readonly IDataService _dataService;
 
-        public ProgramService(IServiceProvider serviceProvider)
-        {
-            _serviceProvider = serviceProvider;
-            _commandService = serviceProvider.GetService<ICommandService>();
-            _dataService = serviceProvider.GetService<IDataService>(); 
+        public ConsoleService(ICommandService commandService, IDataService dataService)
+        { 
+            _commandService = commandService;
+            _dataService = dataService;
         }
 
         public Command ConvertMessageToCommand(string message)
-        {
+        { 
             return new Command() { UserName = "blablabla", CommandName = CommandEnum.Wall, Info = "blabla" };
         }
 
@@ -48,6 +47,16 @@ namespace SocialNetworkExercise.Services
                     break;
             }
             return result;
+        }
+
+        public string Read()
+        {
+            return Console.ReadLine();
+        }
+
+        public void Write(string message)
+        {
+            Console.WriteLine(message);
         }
     }
 }

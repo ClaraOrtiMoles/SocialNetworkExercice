@@ -7,36 +7,39 @@ using SocialNetworkExercise.Enums;
 
 namespace SocialNetworkExercise
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static int Main(string[] args)
         {
-            IProgramService programService = ConfigureProgram();
+            IServiceProvider serviceProvider = ConfigureServiceProvider(); 
 
+            var consoleService = serviceProvider.GetService<IConsoleService>();
+           
             Dictionary<string, User> data = new Dictionary<string, User>();
 
-            string message = Console.ReadLine();
+            string message = consoleService.Read();
             do
-            {
-                Command command = programService.ConvertMessageToCommand(message);
+            { 
+                Command command = consoleService.ConvertMessageToCommand(message);
                 if (command != null)
                 {
-                    string result = programService.ExecuteCommand(command, data);
+                    string result = consoleService.ExecuteCommand(command, data);
                 }
-                message = Console.ReadLine();
+                message = consoleService.Read();
             } while (string.Compare(message, CommandEnum.Exit.ToString(), StringComparison.InvariantCultureIgnoreCase) != 0);
+
+            return 1;
         }
 
-        private static IProgramService ConfigureProgram()
+        private static IServiceProvider ConfigureServiceProvider()
         {
             var serviceProvider = new ServiceCollection()
                 .AddTransient<ICommandService, CommandService>()
                 .AddTransient<IDataService, DataService>()
-                .AddTransient<IProgramService, ProgramService>()
-                .BuildServiceProvider();
-
-            var programService = serviceProvider.GetService<IProgramService>();
-            return programService;
+                .AddTransient<IConsoleService, ConsoleService>()
+                .BuildServiceProvider(); 
+          
+            return serviceProvider;
         }
     }
 }

@@ -5,7 +5,7 @@ using SocialNetworkExercise.Models;
 namespace SocialNetworkExercise.Services
 {
     public class DataService : IDataService
-    {
+    { 
         public User CreateUser(string userName, Dictionary<string, User> data)
         {
             throw new NotImplementedException();
