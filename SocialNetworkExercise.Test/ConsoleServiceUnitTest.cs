@@ -8,7 +8,7 @@ using SocialNetworkExercise.Services.ServiceContract;
 namespace SocialNetworkExercise.Test
 {
     [TestClass]
-    public class CommandServiceUnitTest
+    public class ConsoleServiceUnitTest
     {
         [TestMethod]
         public void ConsoleServiceConvertMessageToCommand_Posting_ReturnsCommandUsernamePostingInfoMessage()
@@ -66,8 +66,7 @@ namespace SocialNetworkExercise.Test
 
             ICommandService commandService = new CommandService();
             IDataService dataService = new DataService();
-            var ConsoleService = new ConsoleService(commandService, dataService);
-            string[] args = new string[0];
+            var ConsoleService = new ConsoleService(commandService, dataService); 
 
             //Action
             Command result = ConsoleService.ConvertMessageToCommand(commandMessage);
@@ -87,8 +86,7 @@ namespace SocialNetworkExercise.Test
 
             ICommandService commandService = new CommandService();
             IDataService dataService = new DataService();
-            var ConsoleService = new ConsoleService(commandService, dataService);
-            string[] args = new string[0];
+            var ConsoleService = new ConsoleService(commandService, dataService); 
 
             //Action
             Command result = ConsoleService.ConvertMessageToCommand(commandMessage);
@@ -107,8 +105,7 @@ namespace SocialNetworkExercise.Test
 
             ICommandService commandService = new CommandService();
             IDataService dataService = new DataService();
-            var ConsoleService = new ConsoleService(commandService, dataService);
-            string[] args = new string[0];
+            var ConsoleService = new ConsoleService(commandService, dataService); 
 
             //Action
             Command result = ConsoleService.ConvertMessageToCommand(commandMessage);
