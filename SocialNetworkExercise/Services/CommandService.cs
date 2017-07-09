@@ -9,12 +9,16 @@ namespace SocialNetworkExercise.Services
     {         
         public void Following(User user, string userToFollow, Dictionary<string, User> data)
         {
-            throw new NotImplementedException();
+            if (data.ContainsKey(userToFollow))
+            {
+                user.Following.Add(data[userToFollow]);
+            }
         }
 
         public void Posting(User user, string message, Dictionary<string, User> data)
         {
-            throw new NotImplementedException();
+            Post newPost = new Post(message);
+            user.Posts.Add(newPost);
         }
 
         public string Reading(User user)
