@@ -98,11 +98,8 @@ namespace SocialNetworkExercise.Test
             var user = dataService.CreateUser(newUserName, data);
 
             //Assert
-            Assert.IsTrue(data.ContainsKey(newUserName));
-            Assert.IsTrue(data.ContainsValue(newUser));
-            
+            Assert.IsTrue(data.ContainsKey(newUserName));  
         }
-
-        
+         
     }
 }

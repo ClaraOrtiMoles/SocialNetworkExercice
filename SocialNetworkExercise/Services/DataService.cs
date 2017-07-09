@@ -8,12 +8,23 @@ namespace SocialNetworkExercise.Services
     { 
         public User CreateUser(string userName, Dictionary<string, User> data)
         {
-            throw new NotImplementedException();
+            var newUser = new User(userName);
+            data.Add(userName, newUser);
+            return newUser;
         }
 
         public User GetUser(string userName, Dictionary<string, User> data)
         {
-            throw new NotImplementedException();
+            User user = null;
+            if (data.ContainsKey(userName))
+            {
+                user = data[userName];
+            }
+            else
+            {
+                user = null;
+            }
+            return user;
         }
     }
 }

@@ -51,31 +51,36 @@ namespace SocialNetworkExercise.Services
          
         public string ExecuteCommand(Command command, Dictionary<string, User> data)
         {
-            var user = _dataService.GetUser(command.UserName, data);
-            if (user == null)
+            string result = string.Empty;
+
+            User user = GetUser(command, data);
+
+            if (user != null)
             {
-                user = _dataService.CreateUser(command.UserName, data);
+                switch (command.CommandName)
+                {
+                    case CommandEnum.Reading:
+                        result = _commandService.Reading(user);
+                        break;
+                    case CommandEnum.Posting:
+                        result = _commandService.Posting(user, command.Info, data);
+                        break;
+                    case CommandEnum.Follow:
+                        result = _commandService.Following(user, command.Info, data);
+                        break;
+                    case CommandEnum.Wall:
+                        result = _commandService.Wall(user, data);
+                        break;
+                }
             }
-            var result = string.Empty;
-            
-            switch (command.CommandName)
+            else
             {
-                case CommandEnum.Reading:
-                    result = _commandService.Reading(user);
-                    break;
-                case CommandEnum.Posting:
-                    result = _commandService.Posting(user, command.Info, data);
-                    break;
-                case CommandEnum.Follow:
-                    result = _commandService.Following(user, command.Info, data);
-                    break;
-                case CommandEnum.Wall:
-                    result = _commandService.Wall(user, data);
-                    break;
+                result = "User not valid. Try Again!";
             }
+
             return result;
         }
-
+         
         public string Read()
         {
             return Console.ReadLine();
@@ -115,5 +120,15 @@ namespace SocialNetworkExercise.Services
             return command;
         }
 
+        private User GetUser(Command command, Dictionary<string, User> data)
+        {
+            var user = _dataService.GetUser(command.UserName, data);
+            if (user == null)
+            {
+                user = _dataService.CreateUser(command.UserName, data);
+            }
+
+            return user;
+        }
     }
 }
