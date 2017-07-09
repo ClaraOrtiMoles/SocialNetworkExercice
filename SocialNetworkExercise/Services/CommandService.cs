@@ -2,6 +2,7 @@
 using SocialNetworkExercise.Services.ServiceContract;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SocialNetworkExercise.Services
 {
@@ -15,20 +16,40 @@ namespace SocialNetworkExercise.Services
             }
         }
 
-        public void Posting(User user, string message, Dictionary<string, User> data)
+        public void Posting(User user, string message)
         {
-            Post newPost = new Post(message);
-            user.Posts.Add(newPost);
+            Post newPost = new Post(user.UserName, message);
+            user.Posts.Insert(0, newPost);
         }
 
         public string Reading(User user)
         {
-            throw new NotImplementedException();
+            string result = string.Empty;
+            foreach (var item in user.Posts)
+            {
+                string message = item.ToString();
+                result = result != string.Empty ? $"{result}\n{message}" : $"{message}";
+            }
+            return result;
         }
-
-        public string Wall(User user, Dictionary<string, User> data)
+         
+        public string Wall(User user)
         {
-            throw new NotImplementedException();
+            string result = string.Empty;
+            var wall = new List<Post>(user.Posts);
+            foreach (var follow in user.Following)
+            {
+                wall.AddRange(follow.Posts);
+            }
+            var sortedWall = wall.OrderByDescending(x => x.Time);
+
+            foreach (var post in sortedWall)
+            {
+                string message = $"{post.Author} - {post.ToString()}";
+                result = result != string.Empty ? $"{result}\n{message}" : $"{message}";
+            }
+            
+            return result;
         }
     }
 }

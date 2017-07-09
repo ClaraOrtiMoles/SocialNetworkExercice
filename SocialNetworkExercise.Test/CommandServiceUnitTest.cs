@@ -1,11 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using SocialNetworkExercise.Models;
 using SocialNetworkExercise.Services;
 using SocialNetworkExercise.Services.ServiceContract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace SocialNetworkExercise.Test
 {
@@ -75,7 +75,7 @@ namespace SocialNetworkExercise.Test
             ICommandService commandService = new CommandService();
 
             //Action
-            commandService.Posting(currentUser, messageToPost, data);
+            commandService.Posting(currentUser, messageToPost);
 
             //Assert
             Assert.IsTrue(currentUser.Posts.Any(x => x.Message == messageToPost));
@@ -88,16 +88,24 @@ namespace SocialNetworkExercise.Test
             //Arrange  
             string currentUserName = "Alice";
             User currentUser = new User(currentUserName);
-            Post currentPost = new Post("I love the weather today"); 
-            currentUser.Posts.Add(currentPost); 
 
+            Post secondPost = new Post(currentUserName, "I love the weather today"); 
+            currentUser.Posts.Add(secondPost); 
+            Thread.Sleep(5000); 
+            Post firstPost = new Post(currentUserName, "Create Unit Test is quite complicated!");
+            currentUser.Posts.Insert(0, firstPost);
+             
             ICommandService commandService = new CommandService();
 
             //Action
             var result = commandService.Reading(currentUser);
 
-            //Assert
-            Assert.AreEqual(result, "I love the weather today (0 minutes ago)"); 
+            //Assert  
+            var firstPostSeconds = DateTime.Now.Second - secondPost.Time.Second;
+            var secondPostSeconds = DateTime.Now.Second - firstPost.Time.Second;
+            Assert.AreEqual(result,
+                $"Create Unit Test is quite complicated! ({secondPostSeconds} seconds ago)" +
+                $"\nI love the weather today ({firstPostSeconds} seconds ago)");
         }
 
         [TestMethod]
@@ -106,9 +114,9 @@ namespace SocialNetworkExercise.Test
             //Arrange  
             string currentUserName = "Alice";
             User currentUser = new User(currentUserName);
-            Post onePost = new Post("I love the weather today");
+            Post onePost = new Post(currentUserName, "I love the weather today");
             currentUser.Posts.Add(onePost);
-            Post otherPost = new Post("I am enjoying with my exercise!");
+            Post otherPost = new Post(currentUserName, "I am enjoying with my exercise!");
             currentUser.Posts.Add(otherPost);
 
             ICommandService commandService = new CommandService();
@@ -117,7 +125,8 @@ namespace SocialNetworkExercise.Test
             var result = commandService.Reading(currentUser);
 
             //Assert
-            Assert.AreEqual(result, @"I love the weather today (0 minutes ago)\n I am enjoying with my exercise! (0 minutes ago)");
+            var nSeconds  = DateTime.Now.Second - onePost.Time.Second; 
+            Assert.AreEqual(result, $"I love the weather today ({nSeconds} seconds ago)\nI am enjoying with my exercise! ({nSeconds} seconds ago)");
 
         }
 
@@ -135,6 +144,46 @@ namespace SocialNetworkExercise.Test
 
             //Assert
             Assert.AreEqual(result, string.Empty);
+
+        }
+
+        [TestMethod]
+        public void CommandServiceWall_UserWithOnePostAndFollowingTwoUsersWithOnePost_ReturnThreePostsOrderingByTime()
+        {
+            string currentUserName = "Alice";
+            User currentUser = new User(currentUserName);
+            Post onePost = new Post(currentUserName, "I love the weather today"); 
+            currentUser.Posts.Add(onePost);
+           
+            Thread.Sleep(1000);
+            string followName = "Bob";
+            User followingUser = new User(followName);
+            Post followingPost = new Post(followName, "I am enjoying with my exercise!");
+            followingUser.Posts.Add(followingPost);
+
+            Thread.Sleep(1000);
+            string followOtherUserName = "Clara";
+            User followingOtherUser = new User(followOtherUserName);
+            Post followingOtherPost = new Post(followOtherUserName, "Create Unit Test is quite complicated!");
+            followingOtherUser.Posts.Add(followingOtherPost);
+             
+            currentUser.Following.Add(followingUser);
+            currentUser.Following.Add(followingOtherUser);
+
+            ICommandService commandService = new CommandService();
+
+            //Action
+            var result = commandService.Wall(currentUser);
+
+            //Assert
+            var nSecondsCurrentUser = DateTime.Now.Second - onePost.Time.Second;
+            var nSecondsFollowingUser = DateTime.Now.Second - followingPost.Time.Second;
+            var nSecondsFollowingOtherUser = DateTime.Now.Second - followingOtherPost.Time.Second;
+            Assert.AreEqual(result, 
+                $"{followOtherUserName} - Create Unit Test is quite complicated! ({nSecondsFollowingOtherUser} seconds ago)" +
+                $"\n{followName} - I am enjoying with my exercise! ({nSecondsFollowingUser} seconds ago)" + 
+                $"\n{currentUserName} - I love the weather today ({nSecondsCurrentUser} seconds ago)");
+
 
         }
 

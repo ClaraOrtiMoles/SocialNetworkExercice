@@ -63,13 +63,13 @@ namespace SocialNetworkExercise.Services
                         result = _commandService.Reading(user);
                         break;
                     case CommandEnum.Posting:
-                        _commandService.Posting(user, command.Info, data);
+                        _commandService.Posting(user, command.Info);
                         break;
                     case CommandEnum.Follow:
                         _commandService.Following(user, command.Info, data);
                         break;
                     case CommandEnum.Wall:
-                        result = _commandService.Wall(user, data);
+                        result = _commandService.Wall(user);
                         break;
                 }
             }

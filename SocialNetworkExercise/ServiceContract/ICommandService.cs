@@ -5,9 +5,9 @@ namespace SocialNetworkExercise.Services.ServiceContract
 {
     public interface ICommandService
     {
-        void Posting(User user, string message, Dictionary<string, User> data);
+        void Posting(User user, string message);
         string Reading(User user);
         void Following(User user, string userToFollow, Dictionary<string, User> data);
-        string Wall(User user, Dictionary<string, User> data);
+        string Wall(User user);
     }
 }

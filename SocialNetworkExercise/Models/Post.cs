@@ -9,12 +9,14 @@ namespace SocialNetworkExercise.Models
 
         }
 
-        public Post(string message)
+        public Post(string userName, string message)
         {
             Message = message;
-            Time = DateTime.Now; 
+            Time = DateTime.Now;
+            Author = userName;
         }
-         
+
+        public string Author { get; private set; } 
         public string Message { get; private set; }
         public DateTime Time { get; private set; }
 
