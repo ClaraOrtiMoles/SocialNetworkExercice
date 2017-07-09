@@ -115,5 +115,7 @@ namespace SocialNetworkExercise.Test
             //Assert
             Assert.AreEqual(result.CommandName, Enums.CommandEnum.Exit); 
         }
+
+
     }
 }

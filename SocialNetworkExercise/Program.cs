@@ -18,15 +18,17 @@ namespace SocialNetworkExercise
             Dictionary<string, User> data = new Dictionary<string, User>();
 
             string message = consoleService.Read();
+            Command command;
             do
-            { 
-                Command command = consoleService.ConvertMessageToCommand(message);
+            {
+                command = consoleService.ConvertMessageToCommand(message);
                 if (command != null)
                 {
                     string result = consoleService.ExecuteCommand(command, data);
+                    consoleService.Write(result);
                 }
                 message = consoleService.Read();
-            } while (string.Compare(message, CommandEnum.Exit.ToString(), StringComparison.InvariantCultureIgnoreCase) != 0);
+            } while (command!=null && command.CommandName == CommandEnum.Exit);
 
             return 1;
         }

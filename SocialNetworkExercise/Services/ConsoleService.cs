@@ -48,36 +48,7 @@ namespace SocialNetworkExercise.Services
             }
             return command;
         }
-
-        private Command ReadCommand(string message, string key, CommandEnum commandName)
-        {
-            Command command = new Command();
-
-            var messageSplit = key != null?
-                message.Split(new string[] { key }, StringSplitOptions.None) 
-                : new string[] { message };
-
-            var nElements = messageSplit.Length;
-
-            if (nElements >= 1)
-            {
-                command.CommandName = commandName;
-                command.UserName = messageSplit[0].Trim();
-
-                if (nElements >= 2)
-                { 
-                    var info = string.Join(key, messageSplit.Skip(1).Take(nElements - 1).ToArray()); 
-                    command.Info = info;
-                } 
-            }
-            else
-            {
-                command = null;
-            }
-
-            return command;
-        }
-
+         
         public string ExecuteCommand(Command command, Dictionary<string, User> data)
         {
             var user = _dataService.GetUser(command.UserName, data);
@@ -86,6 +57,7 @@ namespace SocialNetworkExercise.Services
                 user = _dataService.CreateUser(command.UserName, data);
             }
             var result = string.Empty;
+            
             switch (command.CommandName)
             {
                 case CommandEnum.Reading:
@@ -113,5 +85,35 @@ namespace SocialNetworkExercise.Services
         {
             Console.WriteLine(message);
         }
+
+        private Command ReadCommand(string message, string key, CommandEnum commandName)
+        {
+            Command command = new Command();
+
+            var messageSplit = key != null ?
+                message.Split(new string[] { key }, StringSplitOptions.None)
+                : new string[] { message };
+
+            var nElements = messageSplit.Length;
+
+            if (nElements >= 1)
+            {
+                command.CommandName = commandName;
+                command.UserName = messageSplit[0].Trim();
+
+                if (nElements >= 2)
+                {
+                    var info = string.Join(key, messageSplit.Skip(1).Take(nElements - 1).ToArray());
+                    command.Info = info;
+                }
+            }
+            else
+            {
+                command = null;
+            }
+
+            return command;
+        }
+
     }
 }
