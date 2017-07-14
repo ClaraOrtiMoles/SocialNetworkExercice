@@ -1,54 +1,70 @@
 ﻿using System;
-using System.Collections.Generic;  
+using System.Collections.Generic;
 using SocialNetworkExercise.Models;
-using SocialNetworkExercise.Enums;
+using SocialNetworkExercise.Models.Enums;
 using System.Linq;
 using SocialNetworkExercise.Services.ServiceContract;
+using SocialNetworkExercise.Models.Extensions;
 
 namespace SocialNetworkExercise.Services
 {
     public class ConsoleService : IConsoleService
     {
-        private const string KEYPOSTING = " -> ";
-        private const string KEYFOLLOW = " follows ";
-        private const string KEYWALL = " wall";  
 
         private readonly ICommandService _commandService;
         private readonly IDataService _dataService;
 
         public ConsoleService(ICommandService commandService, IDataService dataService)
-        { 
+        {
             _commandService = commandService;
             _dataService = dataService;
         }
 
         public Command ConvertMessageToCommand(string message)
-        { 
-            Command command;
-            if (message.Contains(KEYPOSTING))
+        {
+            Command command = new Command();
+            Dictionary<string, CommandEnum> dictCommands = GetDictCommandKeys();
+
+            var messageSplit = message.Split();
+            if (messageSplit.Count() == 1)
             {
-                command = ReadCommand(message, KEYPOSTING, CommandEnum.Posting);
-            }
-            else if (message.Contains(KEYFOLLOW))
-            {
-                command = ReadCommand(message, KEYFOLLOW, CommandEnum.Follow); 
-            }
-            else if (message.Contains(KEYWALL))
-            {
-                command = ReadCommand(message, KEYWALL, CommandEnum.Wall);
-            }
-            else if (message.Trim().Equals(CommandEnum.Exit.ToString(), StringComparison.InvariantCultureIgnoreCase))
-            {
-                command = new Command();
-                command.CommandName = CommandEnum.Exit;
+                if (!message.IsMessageExit())
+                {
+                    command.UserName = message.Trim();
+                    command.CommandName = CommandEnum.Reading;
+                }
+                else
+                {
+                    command.CommandName = CommandEnum.Exit;
+                }
             }
             else
             {
-                command = ReadCommand(message, null, CommandEnum.Reading); 
+                var keyCommand = dictCommands.Select(x => x.Key).Where(x => messageSplit[1] == x.Trim()).SingleOrDefault();
+                if (keyCommand!=null)
+                {
+                    var commandMessage = dictCommands[keyCommand];
+                    var me = message.Split(new string[] { keyCommand }, StringSplitOptions.None);
+                    command.UserName = me[0].Trim();
+                    command.CommandName = commandMessage;
+                    if (me.Length > 1)
+                    {
+                        command.Info = string.Join(keyCommand, me.Skip(1).Take(me.Length - 1).ToArray()); 
+                    }
+                }
             }
             return command;
         }
-         
+
+        private static Dictionary<string, CommandEnum> GetDictCommandKeys()
+        {
+            Dictionary<string, CommandEnum> dict = new Dictionary<string, CommandEnum>();
+            dict.Add(Resources.KEYPOSTING, CommandEnum.Posting);
+            dict.Add(Resources.KEYWALL, CommandEnum.Wall);
+            dict.Add(Resources.KEYFOLLOW, CommandEnum.Follow);
+            return dict;
+        }
+
         public string ExecuteCommand(Command command, Dictionary<string, User> data)
         {
             string result = string.Empty;
@@ -73,14 +89,10 @@ namespace SocialNetworkExercise.Services
                         break;
                 }
             }
-            else
-            {
-                result = "User not valid. Try Again!";
-            }
 
             return result;
         }
-         
+
         public string Read()
         {
             return Console.ReadLine();
@@ -90,36 +102,7 @@ namespace SocialNetworkExercise.Services
         {
             Console.WriteLine(message);
         }
-
-        private Command ReadCommand(string message, string key, CommandEnum commandName)
-        {
-            Command command = new Command();
-
-            var messageSplit = key != null ?
-                message.Split(new string[] { key }, StringSplitOptions.None)
-                : new string[] { message };
-
-            var nElements = messageSplit.Length;
-
-            if (nElements >= 1)
-            {
-                command.CommandName = commandName;
-                command.UserName = messageSplit[0].Trim();
-
-                if (nElements >= 2)
-                {
-                    var info = string.Join(key, messageSplit.Skip(1).Take(nElements - 1).ToArray());
-                    command.Info = info;
-                }
-            }
-            else
-            {
-                command = null;
-            }
-
-            return command;
-        }
-
+        
         private User GetUser(Command command, Dictionary<string, User> data)
         {
             var user = _dataService.GetUser(command.UserName, data);

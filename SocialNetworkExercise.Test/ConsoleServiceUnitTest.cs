@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using AutoMoq;
 using SocialNetworkExercise.Services;
 using SocialNetworkExercise.Models;
+using SocialNetworkExercise.Models.Enums;
 using SocialNetworkExercise.Services.ServiceContract;
 
 namespace SocialNetworkExercise.Test
@@ -13,7 +13,6 @@ namespace SocialNetworkExercise.Test
         public void ConsoleServiceConvertMessageToCommand_Posting_ReturnsCommandUsernamePostingInfoMessage()
         {
             //Arrange
-            var mocker = new AutoMoqer();
             string userName = "Alice";
             string message = "I love the weather today";
             string commandMessage = $"{userName} -> {message}";
@@ -26,7 +25,7 @@ namespace SocialNetworkExercise.Test
             Command result = ConsoleService.ConvertMessageToCommand(commandMessage);
 
             //Assert
-            Assert.AreEqual(result.CommandName, Enums.CommandEnum.Posting);
+            Assert.AreEqual(result.CommandName, CommandEnum.Posting);
             Assert.AreEqual(result.UserName, userName); 
             Assert.AreEqual(result.Info, message);
         }
@@ -34,8 +33,7 @@ namespace SocialNetworkExercise.Test
         [TestMethod]
         public void ConsoleServiceConvertMessageToCommand_Follows_ReturnsCommandUsernameFollowingInfoUserToFollow()
         {
-            //Arrange
-            var mocker = new AutoMoqer();
+            //Arrange 
             string userName = "Alice";
             string userToFollow = "Bob";
             string commandMessage = $"{userName} follows {userToFollow}";
@@ -48,7 +46,7 @@ namespace SocialNetworkExercise.Test
             Command result = ConsoleService.ConvertMessageToCommand(commandMessage);
 
             //Assert
-            Assert.AreEqual(result.CommandName, Enums.CommandEnum.Follow); 
+            Assert.AreEqual(result.CommandName, CommandEnum.Follow); 
             Assert.AreEqual(result.UserName, userName);
             Assert.AreEqual(result.Info, userToFollow);
         }
@@ -56,8 +54,7 @@ namespace SocialNetworkExercise.Test
         [TestMethod]
         public void ConsoleServiceConvertMessageToCommand_Wall_ReturnsCommandUsernameWall()
         {
-            //Arrange
-            var mocker = new AutoMoqer();
+            //Arrange 
             string userName = "Alice"; 
             string commandMessage = $"{userName} wall   ";
 
@@ -69,15 +66,14 @@ namespace SocialNetworkExercise.Test
             Command result = ConsoleService.ConvertMessageToCommand(commandMessage);
 
             //Assert
-            Assert.AreEqual(result.CommandName, Enums.CommandEnum.Wall);
+            Assert.AreEqual(result.CommandName, CommandEnum.Wall);
             Assert.AreEqual(result.UserName, userName); 
         }
 
         [TestMethod]
         public void ConsoleServiceConvertMessageToCommand_Reading_ReturnsCommandUsernameReading()
         {
-            //Arrange
-            var mocker = new AutoMoqer();
+            //Arrange 
             string userName = "Alice";
             string commandMessage = $"{userName} ";
 
@@ -89,15 +85,14 @@ namespace SocialNetworkExercise.Test
             Command result = ConsoleService.ConvertMessageToCommand(commandMessage);
 
             //Assert
-            Assert.AreEqual(result.CommandName, Enums.CommandEnum.Reading);
+            Assert.AreEqual(result.CommandName, CommandEnum.Reading);
             Assert.AreEqual(result.UserName, userName);
         }
 
         [TestMethod]
         public void ConsoleServiceConvertMessageToCommand_Exit_ReturnsCommandExitNoUser()
         {
-            //Arrange
-            var mocker = new AutoMoqer(); 
+            //Arrange 
             string commandMessage = $"exit ";
 
             ICommandService commandService = new CommandService();
@@ -108,7 +103,7 @@ namespace SocialNetworkExercise.Test
             Command result = ConsoleService.ConvertMessageToCommand(commandMessage);
 
             //Assert
-            Assert.AreEqual(result.CommandName, Enums.CommandEnum.Exit); 
+            Assert.AreEqual(result.CommandName, CommandEnum.Exit); 
         }
          
     }

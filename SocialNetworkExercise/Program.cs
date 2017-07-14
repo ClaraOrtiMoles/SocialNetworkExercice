@@ -1,51 +1,45 @@
 ﻿using System;
-using Microsoft.Extensions.DependencyInjection;
-using SocialNetworkExercise.Services;
+using Microsoft.Extensions.DependencyInjection; 
 using SocialNetworkExercise.Models;
-using System.Collections.Generic;
-using SocialNetworkExercise.Enums;
+using System.Collections.Generic; 
 using SocialNetworkExercise.Services.ServiceContract;
+using SocialNetworkExercise.Extensions;
 
 namespace SocialNetworkExercise
 {
     public class Program
     {
-        public static int Main(string[] args)
+        public static void Main(string[] args)
         {
-            IServiceProvider serviceProvider = ConfigureServiceProvider(); 
+            IServiceProvider serviceProvider = Configuration.ConfigureServiceProvider();
 
             var consoleService = serviceProvider.GetService<IConsoleService>();
-           
-            Dictionary<string, User> data = new Dictionary<string, User>();
+            consoleService.Write(Resources.WelcomeMessage);
 
-            string message = string.Empty;
-            Command command;
+            Execute(consoleService);
+
+            consoleService.Write(Resources.ByeMessage);
+        }
+
+        private static void Execute(IConsoleService consoleService)
+        {
+            Dictionary<string, User> data = new Dictionary<string, User>();
+                         
+            Command command; 
             do
             {
-                message = consoleService.Read();
+                string message = consoleService.Read();
                 command = consoleService.ConvertMessageToCommand(message);
-                if (command != null)
+                if (!command.IsExit())
                 {
                     string result = consoleService.ExecuteCommand(command, data);
-                    if (!result.Equals(string.Empty))
+                    if (!string.IsNullOrWhiteSpace(result))
                     {
                         consoleService.Write(result);
-                    } 
-                }  
-            } while (command==null || command.CommandName != CommandEnum.Exit);
-
-            return 1;
+                    }
+                }
+            } while (!command.IsExit());
         }
-
-        private static IServiceProvider ConfigureServiceProvider()
-        {
-            var serviceProvider = new ServiceCollection()
-                .AddTransient<ICommandService, CommandService>()
-                .AddTransient<IDataService, DataService>()
-                .AddTransient<IConsoleService, ConsoleService>()
-                .BuildServiceProvider(); 
-          
-            return serviceProvider;
-        }
+        
     }
 }

@@ -1,8 +1,11 @@
-﻿using SocialNetworkExercise.Models;
+﻿using SocialNetworkExercise.Extensions;
+using SocialNetworkExercise.Models;
+using SocialNetworkExercise.Models.Extensions;
 using SocialNetworkExercise.Services.ServiceContract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SocialNetworkExercise.Services
 {
@@ -25,11 +28,12 @@ namespace SocialNetworkExercise.Services
         public string Reading(User user)
         {
             string result = string.Empty;
-            foreach (var item in user.Posts)
+            user.Posts.ForEach(post =>
             {
-                string message = item.ToString();
-                result = result != string.Empty ? $"{result}\n{message}" : $"{message}";
-            }
+                string message = post.ToMessage();
+                result = result.ConcatMessage(message);
+            });
+            
             return result;
         }
          
@@ -37,18 +41,16 @@ namespace SocialNetworkExercise.Services
         {
             string result = string.Empty;
             var wall = new List<Post>(user.Posts);
-            foreach (var follow in user.Following)
-            {
-                wall.AddRange(follow.Posts);
-            }
-            var sortedWall = wall.OrderByDescending(x => x.Time);
-
-            foreach (var post in sortedWall)
-            {
-                string message = $"{post.Author} - {post.ToString()}";
-                result = result != string.Empty ? $"{result}\n{message}" : $"{message}";
-            }
             
+            Parallel.ForEach(user.Following, userFollow => { wall.AddRange(userFollow.Posts); });
+
+            var sortedWall = wall.OrderByDescending(x => x.Time); 
+            sortedWall.ToList().ForEach(post =>
+            {
+                string message = $"{post.Author} - {post.ToMessage()}";
+                result = result.ConcatMessage(message);
+            });
+                      
             return result;
         }
     }
