@@ -25,7 +25,7 @@ namespace SocialNetworkExercise.Services
             Command command = new Command();
             Dictionary<string, CommandEnum> dictCommands = GetDictCommandKeys();
 
-            var messageSplit = message.Split();
+            var messageSplit = message.Trim().Split();
             if (messageSplit.Count() == 1)
             {
                 if (!message.IsMessageExit())

@@ -12,7 +12,7 @@ namespace SocialNetworkExercise.Models.Extensions
 
         public static bool IsMessageExit(this string message)
         {
-            return message.Trim().Equals(Resources.EXIT, StringComparison.InvariantCultureIgnoreCase)
+            return message.Trim().Equals(Resources.EXIT, StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }
