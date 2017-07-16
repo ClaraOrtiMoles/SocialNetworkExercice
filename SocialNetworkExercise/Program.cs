@@ -30,7 +30,7 @@ namespace SocialNetworkExercise
             {
                 string message = consoleService.Read();
                 command = consoleService.ConvertMessageToCommand(message);
-                if (!command.IsExit())
+                if (command.IsDefined() && !command.IsExit())
                 {
                     string result = consoleService.ExecuteCommand(command, data);
                     if (!string.IsNullOrWhiteSpace(result))

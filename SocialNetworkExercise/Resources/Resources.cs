@@ -12,9 +12,9 @@
 
         public const string ByeMessage = "Thank you. Bye";
                 
-        public const string KEYPOSTING = " -> ";
-        public const string KEYFOLLOW = " follows ";
-        public const string KEYWALL = " wall";
+        public const string KEYPOSTING = "->";
+        public const string KEYFOLLOW = "follows";
+        public const string KEYWALL = "wall";
         public const string EXIT = "exit";
 
 

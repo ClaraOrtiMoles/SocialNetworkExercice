@@ -10,48 +10,73 @@ using System.Threading.Tasks;
 namespace SocialNetworkExercise.Services
 {
     public class CommandService : ICommandService
-    {         
-        public void Following(User user, string userToFollow, Dictionary<string, User> data)
+    {
+        private readonly IDataService _dataService;
+
+        public CommandService(IDataService dataService)
         {
+            _dataService = dataService;
+        }
+
+        public string Following(Command command, Dictionary<string, User> data)
+        {
+            var user = _dataService.GetUser(command.UserName, data);
+            var userToFollow = command.Info;
+            
             if (data.ContainsKey(userToFollow))
             {
                 user.Following.Add(data[userToFollow]);
             }
+
+            return string.Empty;
         }
 
-        public void Posting(User user, string message)
+         
+        public string Posting(Command command, Dictionary<string, User> data)
         {
-            Post newPost = new Post(user.UserName, message);
-            user.Posts.Insert(0, newPost);
-        }
+            var user = _dataService.GetUser(command.UserName, data);
+            if (user == null)
+            {
+                user = _dataService.CreateUser(command.UserName, data);
+            }
 
-        public string Reading(User user)
+            Post newPost = new Post(user.UserName, command.Info);
+            user.Posts.Insert(0, newPost);
+
+            return string.Empty;
+        }
+         
+        public string Reading(Command command, Dictionary<string, User> data)
         {
             string result = string.Empty;
+            var user = _dataService.GetUser(command.UserName, data);
             user.Posts.ForEach(post =>
             {
                 string message = post.ToMessage();
                 result = result.ConcatMessage(message);
             });
-            
+
             return result;
         }
          
-        public string Wall(User user)
+        public string Wall(Command command, Dictionary<string, User> data)
         {
             string result = string.Empty;
+            var user = _dataService.GetUser(command.UserName, data);
             var wall = new List<Post>(user.Posts);
-            
+
             Parallel.ForEach(user.Following, userFollow => { wall.AddRange(userFollow.Posts); });
 
-            var sortedWall = wall.OrderByDescending(x => x.Time); 
+            var sortedWall = wall.OrderByDescending(x => x.Time);
             sortedWall.ToList().ForEach(post =>
             {
                 string message = $"{post.Author} - {post.ToMessage()}";
                 result = result.ConcatMessage(message);
             });
-                      
+
             return result;
         }
+
+        
     }
 }

@@ -9,5 +9,10 @@ namespace SocialNetworkExercise.Extensions
         {
             return source != null && source.CommandName == CommandEnum.Exit;
         }
+
+        public static bool IsDefined(this Command source)
+        {
+            return source != null && source.CommandName == CommandEnum.Default;
+        }
     }
 }

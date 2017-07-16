@@ -2,11 +2,11 @@
 {
     public enum CommandEnum  
     {
+        Default,
         Reading, 
         Posting, 
         Wall, 
         Follow,
-        Exit,
-        Default
+        Exit 
     }
 }
