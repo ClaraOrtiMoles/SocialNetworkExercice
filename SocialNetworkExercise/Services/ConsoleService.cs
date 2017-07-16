@@ -45,16 +45,6 @@ namespace SocialNetworkExercise.Services
             return result;
         }
 
-        private Dictionary<CommandEnum, Func<Command, Dictionary<string, User>, string>> GetDictionaryCommandActions()
-        {
-            var dictCommands = new Dictionary<CommandEnum, Func<Command, Dictionary<string, User>, string>>();
-            dictCommands.Add(CommandEnum.Reading, _commandService.Reading);
-            dictCommands.Add(CommandEnum.Posting, _commandService.Posting);
-            dictCommands.Add(CommandEnum.Follow, _commandService.Following);
-            dictCommands.Add(CommandEnum.Wall, _commandService.Wall);
-            return dictCommands;
-        }
-
         public string Read()
         {
             return Console.ReadLine();
@@ -73,14 +63,24 @@ namespace SocialNetworkExercise.Services
             dict.Add(Resources.KEYFOLLOW, CommandEnum.Follow);
             return dict;
         }
-
+         
+        private Dictionary<CommandEnum, Func<Command, Dictionary<string, User>, string>> GetDictionaryCommandActions()
+        {
+            var dictCommands = new Dictionary<CommandEnum, Func<Command, Dictionary<string, User>, string>>();
+            dictCommands.Add(CommandEnum.Reading, _commandService.Reading);
+            dictCommands.Add(CommandEnum.Posting, _commandService.Posting);
+            dictCommands.Add(CommandEnum.Follow, _commandService.Following);
+            dictCommands.Add(CommandEnum.Wall, _commandService.Wall);
+            return dictCommands;
+        }
+         
         private void IdentifyNonUnaryCommand(Command command, string[] messageSplit)
         {
             Dictionary<string, CommandEnum> dictCommands = GetDictCommandKeys();
-            var keyMessage = messageSplit[1];
+            var keyMessage = messageSplit[Resources.POSKEYCOMMAND];
             if (dictCommands.ContainsKey(keyMessage))
             {
-                command.UserName = messageSplit[0];
+                command.UserName = messageSplit[Resources.POSUSERNAME];
                 command.CommandName = dictCommands[keyMessage];
                 if (messageSplit.Length > 2)
                 {
@@ -91,9 +91,9 @@ namespace SocialNetworkExercise.Services
 
         private void IdentifyUnaryCommand(Command command, string[] messageSplit)
         {
-            if (!messageSplit[0].IsMessageExit())
+            if (!messageSplit[Resources.POSUSERNAME].IsMessageExit())
             {
-                command.UserName = messageSplit[0];
+                command.UserName = messageSplit[Resources.POSUSERNAME];
                 command.CommandName = CommandEnum.Reading;
             }
             else

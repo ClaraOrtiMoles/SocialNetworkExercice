@@ -22,12 +22,13 @@ namespace SocialNetworkExercise.Services
         {
             var user = _dataService.GetUser(command.UserName, data);
             var userToFollow = command.Info;
-            
-            if (data.ContainsKey(userToFollow))
+            if (user != null && !string.IsNullOrWhiteSpace(userToFollow))
             {
-                user.Following.Add(data[userToFollow]);
-            }
-
+                if (data.ContainsKey(userToFollow))
+                {
+                    user.Following.Add(data[userToFollow]);
+                }
+            } 
             return string.Empty;
         }
 

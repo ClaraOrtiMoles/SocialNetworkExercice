@@ -17,6 +17,9 @@
         public const string KEYWALL = "wall";
         public const string EXIT = "exit";
 
+        public const int POSUSERNAME = 0;
+        public const int POSKEYCOMMAND = 1;
+
 
     }
 }
