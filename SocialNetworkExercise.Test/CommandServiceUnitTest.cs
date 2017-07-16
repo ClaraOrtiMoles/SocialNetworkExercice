@@ -27,10 +27,16 @@ namespace SocialNetworkExercise.Test
             data.Add(currentUserName, currentUser);  
             data.Add(userNameToFollow, userToFollow);
 
-            ICommandService commandService = new CommandService();
+            Command command = new Command();
+            command.CommandName = Models.Enums.CommandEnum.Follow;
+            command.Info = userNameToFollow;
+            command.UserName = currentUserName;
+
+            IDataService dataService = new DataService();
+            ICommandService commandService = new CommandService(dataService);
 
             //Action
-            commandService.Following(currentUser, userNameToFollow, data);
+            commandService.Following(command, data);
 
             //Assert
             Assert.IsTrue(currentUser.Following.Any(x => x.UserName == userNameToFollow));
@@ -49,12 +55,17 @@ namespace SocialNetworkExercise.Test
             User currentUser = new User(currentUserName);
             User userToFollow = new User(userNameToFollow);
 
-            data.Add(currentUserName, currentUser); 
+            data.Add(currentUserName, currentUser);
 
-            ICommandService commandService = new CommandService();
+            Command command = new Command();
+            command.CommandName = Models.Enums.CommandEnum.Follow;
+            command.Info = userNameToFollow;
+            command.UserName = currentUserName;
+
+            ICommandService commandService = new CommandService(new DataService());
 
             //Action
-            commandService.Following(currentUser, userNameToFollow, data);
+            commandService.Following(command, data);
 
             //Assert
             Assert.IsFalse(currentUser.Following.Any(x => x.UserName == userNameToFollow));
@@ -67,15 +78,20 @@ namespace SocialNetworkExercise.Test
             //Arrange 
             Dictionary<string, User> data = new Dictionary<string, User>();
 
+            string messageToPost = "I love the weather today";
             string currentUserName = "Alice"; 
             User currentUser = new User(currentUserName); 
             data.Add(currentUserName, currentUser);
 
-            string messageToPost = "I love the weather today";
-            ICommandService commandService = new CommandService();
+            Command command = new Command();
+            command.CommandName = Models.Enums.CommandEnum.Posting; 
+            command.UserName = currentUserName;
+            command.Info = messageToPost;
+
+            ICommandService commandService = new CommandService(new DataService());
 
             //Action
-            commandService.Posting(currentUser, messageToPost);
+            commandService.Posting(command, data);
 
             //Assert
             Assert.IsTrue(currentUser.Posts.Any(x => x.Message == messageToPost));
@@ -94,11 +110,18 @@ namespace SocialNetworkExercise.Test
             Thread.Sleep(5000); 
             Post firstPost = new Post(currentUserName, "Create Unit Test is quite complicated!");
             currentUser.Posts.Insert(0, firstPost);
-             
-            ICommandService commandService = new CommandService();
+
+            Command command = new Command();
+            command.CommandName = Models.Enums.CommandEnum.Reading;
+            command.UserName = currentUserName;
+
+            Dictionary<string, User> data = new Dictionary<string, User>();
+            data.Add(currentUserName, currentUser);
+
+            ICommandService commandService = new CommandService(new DataService());
 
             //Action
-            var result = commandService.Reading(currentUser);
+            var result = commandService.Reading(command, data);
 
             //Assert  
             var firstPostSeconds = DateTime.Now.Second - secondPost.Time.Second;
@@ -119,10 +142,17 @@ namespace SocialNetworkExercise.Test
             Post otherPost = new Post(currentUserName, "I am enjoying with my exercise!");
             currentUser.Posts.Add(otherPost);
 
-            ICommandService commandService = new CommandService();
+            Dictionary<string, User> data = new Dictionary<string, User>();
+            data.Add(currentUserName, currentUser);
+
+            Command command = new Command();
+            command.UserName = currentUserName;
+            command.CommandName = Models.Enums.CommandEnum.Reading;
+
+            ICommandService commandService = new CommandService(new DataService());
 
             //Action
-            var result = commandService.Reading(currentUser);
+            var result = commandService.Reading(command, data);
 
             //Assert
             var nSeconds  = DateTime.Now.Second - onePost.Time.Second; 
@@ -136,11 +166,18 @@ namespace SocialNetworkExercise.Test
             //Arrange  
             string currentUserName = "Alice";
             User currentUser = new User(currentUserName);
-            
-            ICommandService commandService = new CommandService();
+
+            Command command = new Command();
+            command.UserName = currentUserName;
+            command.CommandName = Models.Enums.CommandEnum.Reading;
+
+            Dictionary<string, User> data = new Dictionary<string, User>();
+            data.Add(currentUserName, currentUser);
+
+            ICommandService commandService = new CommandService(new DataService());
 
             //Action
-            var result = commandService.Reading(currentUser);
+            var result = commandService.Reading(command, data);
 
             //Assert
             Assert.AreEqual(result, string.Empty);
@@ -170,10 +207,19 @@ namespace SocialNetworkExercise.Test
             currentUser.Following.Add(followingUser);
             currentUser.Following.Add(followingOtherUser);
 
-            ICommandService commandService = new CommandService();
+            Dictionary<string, User> data = new Dictionary<string, User>();
+            data.Add(currentUserName, currentUser);
+            data.Add(followName, followingUser);
+            data.Add(followOtherUserName, followingOtherUser);
+
+            Command command = new Command();
+            command.CommandName = Models.Enums.CommandEnum.Wall;
+            command.UserName = currentUserName;
+
+            ICommandService commandService = new CommandService(new DataService());
 
             //Action
-            var result = commandService.Wall(currentUser);
+            var result = commandService.Wall(command, data);
 
             //Assert
             var nSecondsCurrentUser = DateTime.Now.Second - onePost.Time.Second;
@@ -186,6 +232,7 @@ namespace SocialNetworkExercise.Test
 
 
         }
+
 
     }
 }

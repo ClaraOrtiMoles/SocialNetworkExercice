@@ -16,10 +16,11 @@ namespace SocialNetworkExercise.Test
             string userName = "Alice";
             string message = "I love the weather today";
             string commandMessage = $"{userName} -> {message}";
-             
-            ICommandService commandService = new CommandService();
+
             IDataService dataService = new DataService();
-            var ConsoleService = new ConsoleService(commandService, dataService); 
+            ICommandService commandService = new CommandService(dataService);
+            
+            var ConsoleService = new ConsoleService(commandService); 
 
             //Action
             Command result = ConsoleService.ConvertMessageToCommand(commandMessage);
@@ -38,9 +39,10 @@ namespace SocialNetworkExercise.Test
             string userToFollow = "Bob";
             string commandMessage = $"{userName} follows {userToFollow}";
 
-            ICommandService commandService = new CommandService();
             IDataService dataService = new DataService();
-            var ConsoleService = new ConsoleService(commandService, dataService); 
+            ICommandService commandService = new CommandService(dataService);
+            
+            var ConsoleService = new ConsoleService(commandService); 
 
             //Action
             Command result = ConsoleService.ConvertMessageToCommand(commandMessage);
@@ -58,9 +60,10 @@ namespace SocialNetworkExercise.Test
             string userName = "Alice"; 
             string commandMessage = $"{userName} wall   ";
 
-            ICommandService commandService = new CommandService();
             IDataService dataService = new DataService();
-            var ConsoleService = new ConsoleService(commandService, dataService); 
+            ICommandService commandService = new CommandService(dataService);
+            
+            var ConsoleService = new ConsoleService(commandService); 
 
             //Action
             Command result = ConsoleService.ConvertMessageToCommand(commandMessage);
@@ -77,9 +80,10 @@ namespace SocialNetworkExercise.Test
             string userName = "Alice";
             string commandMessage = $"{userName} ";
 
-            ICommandService commandService = new CommandService();
             IDataService dataService = new DataService();
-            var ConsoleService = new ConsoleService(commandService, dataService); 
+            ICommandService commandService = new CommandService(dataService);
+           
+            var ConsoleService = new ConsoleService(commandService); 
 
             //Action
             Command result = ConsoleService.ConvertMessageToCommand(commandMessage);
@@ -95,9 +99,9 @@ namespace SocialNetworkExercise.Test
             //Arrange 
             string commandMessage = $"exit ";
 
-            ICommandService commandService = new CommandService();
             IDataService dataService = new DataService();
-            var ConsoleService = new ConsoleService(commandService, dataService); 
+            ICommandService commandService = new CommandService(dataService);            
+            var ConsoleService = new ConsoleService(commandService); 
 
             //Action
             Command result = ConsoleService.ConvertMessageToCommand(commandMessage);
