@@ -72,6 +72,7 @@ To this purpose, the application layer uses IConsoleService, which has the four 
 As I mentioned one of the biggest point has been to be opened to change. 
 
 ### Practices used 
+Trying to use TDD
 
 ## Running the tests
 
@@ -79,12 +80,7 @@ Attached with the solution, there is **SocialNetworkExercice.Test** project. Thi
 
 ### Break down into end to end tests
 
-
-
-
-
-## What about a real life project
-
+Test a DateTime project 
 ## Author 
 
 **Clara Orti Moles** 
