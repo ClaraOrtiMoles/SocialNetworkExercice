@@ -13,7 +13,7 @@ namespace SocialNetworkExercise.Models
         {
             Message = message;
             Time = DateTime.Now;
-            Author = userName;//TODO Revisar
+            Author = userName;
         }
 
         public string Author { get; private set; } 

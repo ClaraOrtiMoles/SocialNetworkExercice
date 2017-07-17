@@ -73,6 +73,37 @@ namespace SocialNetworkExercise.Test
         }
 
         [TestMethod]
+        public void CommandServiceFollowing_AlreadyFollowingUserNameToFollow_DontAddUserToFollowings()
+        {
+            //Arrange 
+            Dictionary<string, User> data = new Dictionary<string, User>();
+
+            string currentUserName = "Alice";
+            string userNameToFollow = "Bob";
+
+            User currentUser = new User(currentUserName); 
+            User userToFollow = new User(userNameToFollow);
+            currentUser.Following.Add(userToFollow);
+
+            data.Add(currentUserName, currentUser);
+            data.Add(userNameToFollow, userToFollow);
+
+            Command command = new Command();
+            command.CommandName = Models.Enums.CommandEnum.Follow;
+            command.Info = userNameToFollow;
+            command.UserName = currentUserName;
+
+            ICommandService commandService = new CommandService(new DataService());
+
+            //Action
+            commandService.Following(command, data);
+
+            //Assert
+            Assert.IsTrue(currentUser.Following.Count(x => x.UserName == userNameToFollow) == 1);
+
+        }
+
+        [TestMethod]
         public void CommandServicePosting_UserAndMessage_CreateAPostIntoUserPostLists()
         {
             //Arrange 
@@ -126,9 +157,11 @@ namespace SocialNetworkExercise.Test
             //Assert  
             var firstPostSeconds = DateTime.Now.Second - secondPost.Time.Second;
             var secondPostSeconds = DateTime.Now.Second - firstPost.Time.Second;
+            var unitSecondPost = secondPostSeconds == 1 ? "second" : "seconds";
+            var unitFirstPost = firstPostSeconds == 1 ? "second" : "seconds";
             Assert.AreEqual(result,
-                $"Create Unit Test is quite complicated! ({secondPostSeconds} seconds ago)" +
-                $"\nI love the weather today ({firstPostSeconds} seconds ago)");
+                $"Create Unit Test is quite complicated! ({secondPostSeconds} {unitSecondPost} ago)" +
+                $"\nI love the weather today ({firstPostSeconds} {unitFirstPost} ago)");
         }
 
         [TestMethod]
@@ -155,8 +188,9 @@ namespace SocialNetworkExercise.Test
             var result = commandService.Reading(command, data);
 
             //Assert
-            var nSeconds  = DateTime.Now.Second - onePost.Time.Second; 
-            Assert.AreEqual(result, $"I love the weather today ({nSeconds} seconds ago)\nI am enjoying with my exercise! ({nSeconds} seconds ago)");
+            var nSeconds  = DateTime.Now.Second - onePost.Time.Second;
+            var units = nSeconds == 1 ? "second" : "seconds";
+            Assert.AreEqual(result, $"I love the weather today ({nSeconds} {units} ago)\nI am enjoying with my exercise! ({nSeconds} seconds ago)");
 
         }
 
@@ -223,12 +257,15 @@ namespace SocialNetworkExercise.Test
 
             //Assert
             var nSecondsCurrentUser = DateTime.Now.Second - onePost.Time.Second;
+            var unitsCurrentUser = nSecondsCurrentUser == 1 ? "second" : "seconds";
             var nSecondsFollowingUser = DateTime.Now.Second - followingPost.Time.Second;
+            var unitsSecondsFollowingUser = nSecondsFollowingUser == 1 ? "second" : "seconds";
             var nSecondsFollowingOtherUser = DateTime.Now.Second - followingOtherPost.Time.Second;
+            var unitsSecondsFollowingOtherUser = nSecondsFollowingOtherUser == 1 ? "second" : "seconds";
             Assert.AreEqual(result, 
-                $"{followOtherUserName} - Create Unit Test is quite complicated! ({nSecondsFollowingOtherUser} seconds ago)" +
-                $"\n{followName} - I am enjoying with my exercise! ({nSecondsFollowingUser} seconds ago)" + 
-                $"\n{currentUserName} - I love the weather today ({nSecondsCurrentUser} seconds ago)");
+                $"{followOtherUserName} - Create Unit Test is quite complicated! ({nSecondsFollowingOtherUser} {unitsSecondsFollowingOtherUser} ago)" +
+                $"\n{followName} - I am enjoying with my exercise! ({nSecondsFollowingUser} {unitsSecondsFollowingUser} ago)" + 
+                $"\n{currentUserName} - I love the weather today ({nSecondsCurrentUser} {unitsCurrentUser} ago)");
 
 
         }

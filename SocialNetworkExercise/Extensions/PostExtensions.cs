@@ -15,23 +15,30 @@ namespace SocialNetworkExercise.Extensions
         private static string ConvertTimeSpanToString(TimeSpan timeSpan)
         {
             string formatTime = string.Empty;
+            string unitsAgo = string.Empty;
             if (timeSpan.Days >= 1)
             {
-                formatTime = $"({timeSpan:%d} days ago)";
+                unitsAgo = timeSpan.Days == 1 ? "day" : "days";
+                formatTime = $"{timeSpan:%d}"; 
             }
             else if (timeSpan.Hours >= 1)
             {
-                formatTime = $"({timeSpan:%h} hours ago)";
+                unitsAgo = timeSpan.Hours == 1 ? "hour" : "hours";
+                formatTime = $"{timeSpan:%h}"; 
             }
             else if (timeSpan.Minutes >= 1)
             {
-                formatTime = $"({timeSpan:%m} minutes ago)";
+                unitsAgo = timeSpan.Minutes == 1 ? "minute" : "minutes";
+                formatTime = $"{timeSpan:%m}";
             }
             else
             {
-                formatTime = $"({timeSpan:%s} seconds ago)";
+                unitsAgo = timeSpan.Seconds == 1 ? "second" : "seconds";
+                formatTime = $"{timeSpan:%s}";
             }
-            return formatTime;
+
+            
+            return $"({formatTime} {unitsAgo} ago)";
         }
     }
 }

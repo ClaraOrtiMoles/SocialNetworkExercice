@@ -20,18 +20,37 @@ namespace SocialNetworkExercise.Services
 
         public string Following(Command command, Dictionary<string, User> data)
         {
-            var user = _dataService.GetUser(command.UserName, data);
-            var userToFollow = command.Info;
-            if (user != null && !string.IsNullOrWhiteSpace(userToFollow))
-            {
-                if (data.ContainsKey(userToFollow))
-                {
-                    user.Following.Add(data[userToFollow]);
-                }
-            } 
-            return string.Empty;
-        }
+            string returnMessage = string.Empty;
 
+            var user = _dataService.GetUser(command.UserName, data);
+            if (user != null)
+            {
+                var userToFollow = command.Info;
+                if (!string.IsNullOrWhiteSpace(userToFollow))
+                {
+                    if (data.ContainsKey(userToFollow))
+                    {
+                        if (!user.Following.Any(f => f.UserName.Equals(userToFollow)))
+                        {
+                            user.Following.Add(data[userToFollow]);
+                        } 
+                    }
+                    else
+                    {
+                        returnMessage = string.Format(Resources.UserDoesNotExist, userToFollow);
+                    }
+                }
+                else
+                {
+                    returnMessage = Resources.UserToFollowNotIndicated;
+                }
+            }
+            else
+            {
+                returnMessage = string.Format(Resources.UserDoesNotExist, command.UserName);
+            }
+            return returnMessage;
+        }
          
         public string Posting(Command command, Dictionary<string, User> data)
         {
@@ -51,11 +70,20 @@ namespace SocialNetworkExercise.Services
         {
             string result = string.Empty;
             var user = _dataService.GetUser(command.UserName, data);
-            user.Posts.ForEach(post =>
+
+            if (user != null)
             {
-                string message = post.ToMessage();
-                result = result.ConcatMessage(message);
-            });
+                user.Posts.ForEach(post =>
+                {
+                    string message = post.ToMessage();
+                    result = result.ConcatMessage(message);
+                });
+            }
+            else
+            {
+                result = string.Format( Resources.UserDoesNotExist, command.UserName);
+            }
+           
 
             return result;
         }
@@ -64,16 +92,23 @@ namespace SocialNetworkExercise.Services
         {
             string result = string.Empty;
             var user = _dataService.GetUser(command.UserName, data);
-            var wall = new List<Post>(user.Posts);
-
-            Parallel.ForEach(user.Following, userFollow => { wall.AddRange(userFollow.Posts); });
-
-            var sortedWall = wall.OrderByDescending(x => x.Time);
-            sortedWall.ToList().ForEach(post =>
+            if (user != null)
             {
-                string message = $"{post.Author} - {post.ToMessage()}";
-                result = result.ConcatMessage(message);
-            });
+                var wall = new List<Post>(user.Posts);
+
+                Parallel.ForEach(user.Following, userFollow => { wall.AddRange(userFollow.Posts); });
+
+                var sortedWall = wall.OrderByDescending(x => x.Time);
+                sortedWall.ToList().ForEach(post =>
+                {
+                    string message = $"{post.Author} - {post.ToMessage()}";
+                    result = result.ConcatMessage(message);
+                }); 
+            }
+            else
+            {
+                result = string.Format(Resources.UserDoesNotExist, command.UserName);
+            }
 
             return result;
         }

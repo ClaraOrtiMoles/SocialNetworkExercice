@@ -11,7 +11,10 @@
                "* To exit write exit ";
 
         public const string ByeMessage = "Thank you. Bye";
-                
+
+        public const string UserDoesNotExist = "User {0} doesn't exist";
+        public const string UserToFollowNotIndicated = "User to follow not indicated";
+
         public const string KEYPOSTING = "->";
         public const string KEYFOLLOW = "follows";
         public const string KEYWALL = "wall";

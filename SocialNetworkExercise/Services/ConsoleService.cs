@@ -10,18 +10,25 @@ namespace SocialNetworkExercise.Services
 {
     public class ConsoleService : IConsoleService
     { 
-        private readonly ICommandService _commandService; 
+        private readonly ICommandService _commandService;
+
+        private Dictionary<CommandEnum, Func<Command, Dictionary<string, User>, string>> _dictCommandActions;
+        private Dictionary<string, CommandEnum> _dictCommandKeys;
 
         public ConsoleService(ICommandService commandService)
         {
-            _commandService = commandService; 
+            _commandService = commandService;
+            _dictCommandActions = GetDictionaryCommandActions();
+            _dictCommandKeys = GetDictCommandKeys();
         }
 
         public Command ConvertMessageToCommand(string message)
         {
             Command command = new Command();
-             
+            bool isUnaryCommand = false;
+
             var messageSplit = message.Split(new char[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+            
             if (messageSplit.Count() == 1)
             {
                 IdentifyUnaryCommand(command, messageSplit);
@@ -37,10 +44,8 @@ namespace SocialNetworkExercise.Services
         public string ExecuteCommand(Command command, Dictionary<string, User> data)
         {
             string result = string.Empty;
-
-            var dictCommandActions = GetDictionaryCommandActions();
-
-            result = dictCommandActions[command.CommandName](command, data);
+             
+            result = _dictCommandActions[command.CommandName](command, data);
 
             return result;
         }
@@ -75,13 +80,12 @@ namespace SocialNetworkExercise.Services
         }
          
         private void IdentifyNonUnaryCommand(Command command, string[] messageSplit)
-        {
-            Dictionary<string, CommandEnum> dictCommands = GetDictCommandKeys();
+        { 
             var keyMessage = messageSplit[Resources.POSKEYCOMMAND];
-            if (dictCommands.ContainsKey(keyMessage))
+            if (_dictCommandKeys.ContainsKey(keyMessage))
             {
                 command.UserName = messageSplit[Resources.POSUSERNAME];
-                command.CommandName = dictCommands[keyMessage];
+                command.CommandName = _dictCommandKeys[keyMessage];
                 if (messageSplit.Length > 2)
                 {
                     command.Info = string.Join(" ", messageSplit.Skip(2).Take(messageSplit.Length - 1).ToArray());
