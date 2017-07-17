@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SocialNetworkExercise.Models;
 using SocialNetworkExercise.Services.ServiceContract;
 
@@ -11,6 +12,11 @@ namespace SocialNetworkExercise.Services
             var newUser = new User(userName);
             data.Add(userName, newUser);
             return newUser;
+        }
+
+        public bool ExistUser(string userName, Dictionary<string, User> data)
+        {
+            return data.ContainsKey(userName);
         }
 
         public User GetUser(string userName, Dictionary<string, User> data)

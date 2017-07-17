@@ -101,6 +101,23 @@ namespace SocialNetworkExercise.Test
             //Assert
             Assert.IsTrue(data.ContainsKey(newUserName));  
         }
-         
+
+        [TestMethod]
+        public void DataServiceExistUser_usernameAlreadyExists_returnTrue()
+        {
+            //Arrange
+            string userName = "clara";
+            Dictionary<string, User> data = new Dictionary<string, User>();
+            data.Add(userName, new User(userName));
+            IDataService dataService = new DataService();
+
+            //Action
+            var exist = dataService.ExistUser(userName, data);
+
+            //Assert
+            Assert.IsTrue(exist);
+        }
+
+
     }
 }

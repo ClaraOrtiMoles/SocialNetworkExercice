@@ -7,5 +7,6 @@ namespace SocialNetworkExercise.Services.ServiceContract
     {
         User CreateUser(string userName, Dictionary<string, User> data);
         User GetUser(string userName, Dictionary<string, User> data);
+        bool ExistUser(string userName, Dictionary<string, User> data);
     }
 }

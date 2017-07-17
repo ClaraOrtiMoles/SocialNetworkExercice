@@ -28,7 +28,7 @@ namespace SocialNetworkExercise.Services
                 var userToFollow = command.Info;
                 if (!string.IsNullOrWhiteSpace(userToFollow))
                 {
-                    if (data.ContainsKey(userToFollow))
+                    if (_dataService.ExistUser(userToFollow, data))
                     {
                         if (!user.Following.Any(f => f.UserName.Equals(userToFollow)))
                         {
