@@ -38,34 +38,56 @@ This is a console-based social networking application based on Twitter satisfyin
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+Download or fork this repository.
 
 ### Prerequisites
 
-Visual studio 2017, .NET Framework...
+Visual studio 2017, .NET Framework 4.5.2, NuGet Packages v3 
 
 ### Installing
 
-Open solution and run solution. Add image program running. 
+* Open solution **SocialNetworkExercise.sln** via Visual Studio 2017.
+* Set SocialNetworkExercise as **StartUp project**
+* **Build** solution: The NuGet Packages should be automatically installed or updated after the first build. 
+* **Run** the solution. In that point you could run it using the debugger (F5) or without using it (Ctrl + F5). 
+
+## Development points
+
+In order to develop this exercise, I have try to deal between the real life project and the exercise. Meaning, I have been focused in the exercise as it was a real project but trying to don't over architecture the application. 
+
+Probably this has been the most difficult part, because some of the classes or services created are quite small, and probably they could be created into other related module, such as DataService that the only thing it does is create or get the user using an UserName, so it could be done into CommandService module, but in a "real" big project, we should have all related with data acces, in a layer in order to avoid dependencies and be able to change the data source if it's needed without change all the logic and also doing test work more easy. 
+
+But since our program is working in memory, it has been imposible to isolate the data acces completely. 
+
+Although the main idea has been to try to develop the application like it would be a real project, I have been completely focused in try to abstract the code enough in order to be able to add new commands with the less impact possible. 
+
+### Architecture
+From an architectural point of view, this project has "three layers" (but in order to not complicate the exercice I have maintain all the code in the application layer, but I have created three services with their contract that would identify each layer). 
+* The first layer would be the application layer. In the project, Program.cs is the main class, meaning, the point of entry. What Program.cs does is to configure all the dependencies (Configuration.cs), read and write from the console, decrypt the message from the console, and call to action.
+To this purpose, the application layer uses IConsoleService, which has the four methods: ConvertMessageToCommand, ExecuteCommand, Read and Write.
+* The second layer would be the business layer. The business layer would be the actions that the program should do when the application says that a specific command has to be executed. This actions are coded on ICommandService, and basically what this service does is bring the four commands that currently the program support: Post, Read, Follow, Write. 
+* Finally, the third layer would be the data layer. This layer would be in charge to execute the CRUD operations. Since this project is in memory and we are not using any storage for the data, this layer has only the methods more isolatables like getUser, createUser, userExist.  
+
+### Open to change
+As I mentioned one of the biggest point has been to be opened to change. 
+
+### Practices used 
 
 ## Running the tests
 
+Attached with the solution, there is **SocialNetworkExercice.Test** project. This project contains a few unit tests to test the different modules of the project. 
+
 ### Break down into end to end tests
+
+
+
+
+
+## What about a real life project
 
 ## Author 
 
 **Clara Orti Moles** 
 [@ClaraOrtiMoles](https://twitter.com/ClaraOrtiMoles)
-
-## Development points
-
-### Algorithms used and why
-
-### Practices used 
-
-### Open to change 
-
-### What about a real life project
-
 
 
