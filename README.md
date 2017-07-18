@@ -9,7 +9,14 @@ This is a console-based social networking application based on Twitter satisfyin
 
 ## Main instructions
 
-// Explain how to use the application
+The first message received after run the application is a Welcome message, it gives us some instructions about how to use the application with the sintax of the commands. 
+It's very important write the command properly since the program has been focused on the "sunny days scenario" and it returns few messages if the command is not recognized
+
+* The user will be created after the first post: To post a message the sintaxis is: <username> -> <message>. If the username doesn't exist, the program will create the user and will store the message. 
+* To read the posts of a specific user, the sintaxis is <username>. In case that the username doesn't exist, the program will show a message pointing out that the user doesn't exist.
+* To follow a user it's necessary write the following sintaxis: <username1> follows <username2>. In case that one of those usernames doesn't exist, the program will return a message indicating wich is the user that hasn't been reached.
+* To see the wall, meaning all the user's post and the following's post, the sintaxis is: <username> wall .Again, in case that the username doesn't exist the program will show a message. 
+* To exit write: exit  
 
 ## Example 
 
@@ -42,7 +49,7 @@ Download or fork this repository.
 
 ### Prerequisites
 
-Visual studio 2017, .NET Framework 4.5.2, NuGet Packages v3 
+Visual studio 2015 or above, .NET Framework 4.5.2, NuGet Packages v3 
 
 ### Installing
 
