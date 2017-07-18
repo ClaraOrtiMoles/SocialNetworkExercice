@@ -94,6 +94,7 @@ As I mentioned one of the biggest point during the development of this project h
 * Add a new entry into the dictionary CommandActions created in ConsoleService, with the CommandEnum.UnFollow as a key, and the action on commandService as a value. 
  
 ### Practices used 
+Trying to use TDD
 
 Since it is not a big project and it is not complicated either, I have been trying to follow the practice Test Drive Development to write the application. That means, first I wrote the test, and then I run the test and I created the code necesary to pass the test, and finally clean the code. 
 I say "trying" because, it has been my first time with this practice, and I haven't been strict following it, though I am really committed to learn and hopefully in a few time I will craft it. 
