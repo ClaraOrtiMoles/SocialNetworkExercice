@@ -103,7 +103,17 @@ I say "trying" because, it has been my first time with this practice, and I have
 
 Attached with the solution, there is **SocialNetworkExercice.Test** project. This project contains a few unit tests to test the different modules of the project. 
 
+Basically, it is possible to run the test using visual studio test explorer. 
+
 ### Break down into end to end tests
+
+The test project contain three TestClasses:
+* **CommandServiceUnitTest.cs** that contains the test methods for testing 4 commands that the application executes: Post, Wall, Follow, Read.
+* **ConsoleServiceUnitTest.cs** contains the test methods for testing all related with read and decript message and commands..
+* **DataServiceUnitTest.cs** contains the test methods for test the methods related with the creation and reading of the users.
+
+
+### Info useful about the test
 
 The main and first issue that I experienced developing the tests, was when the command implies to show a post, the return string is 
 a combination of a message and the time ago, obviously this time ago it will be diferent everytime that we will run the test because the Time in the class Post is private as we can not modify the time when the post has been written, and the time ago is the difference between the current time and the post time. 
