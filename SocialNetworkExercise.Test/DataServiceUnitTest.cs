@@ -107,8 +107,10 @@ namespace SocialNetworkExercise.Test
         {
             //Arrange
             string userName = "clara";
-            Dictionary<string, User> data = new Dictionary<string, User>();
-            data.Add(userName, new User(userName));
+            Dictionary<string, User> data = new Dictionary<string, User>
+            {
+                { userName, new User(userName) }
+            };
             IDataService dataService = new DataService();
 
             //Action

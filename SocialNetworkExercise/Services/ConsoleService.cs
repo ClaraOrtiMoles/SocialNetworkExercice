@@ -24,8 +24,7 @@ namespace SocialNetworkExercise.Services
 
         public Command ConvertMessageToCommand(string message)
         {
-            Command command = new Command();
-            bool isUnaryCommand = false;
+            Command command = new Command(); 
 
             var messageSplit = message.Split(new char[] {' '}, StringSplitOptions.RemoveEmptyEntries);
             
@@ -62,20 +61,24 @@ namespace SocialNetworkExercise.Services
 
         private Dictionary<string, CommandEnum> GetDictCommandKeys()
         {
-            Dictionary<string, CommandEnum> dict = new Dictionary<string, CommandEnum>();
-            dict.Add(Resources.KEYPOSTING, CommandEnum.Posting);
-            dict.Add(Resources.KEYWALL, CommandEnum.Wall);
-            dict.Add(Resources.KEYFOLLOW, CommandEnum.Follow);
+            Dictionary<string, CommandEnum> dict = new Dictionary<string, CommandEnum>
+            {
+                { Resources.KEYPOSTING, CommandEnum.Posting },
+                { Resources.KEYWALL, CommandEnum.Wall },
+                { Resources.KEYFOLLOW, CommandEnum.Follow }
+            };
             return dict;
         }
          
         private Dictionary<CommandEnum, Func<Command, Dictionary<string, User>, string>> GetDictionaryCommandActions()
         {
-            var dictCommands = new Dictionary<CommandEnum, Func<Command, Dictionary<string, User>, string>>();
-            dictCommands.Add(CommandEnum.Reading, _commandService.Reading);
-            dictCommands.Add(CommandEnum.Posting, _commandService.Posting);
-            dictCommands.Add(CommandEnum.Follow, _commandService.Following);
-            dictCommands.Add(CommandEnum.Wall, _commandService.Wall);
+            var dictCommands = new Dictionary<CommandEnum, Func<Command, Dictionary<string, User>, string>>
+            {
+                { CommandEnum.Reading, _commandService.Reading },
+                { CommandEnum.Posting, _commandService.Posting },
+                { CommandEnum.Follow, _commandService.Following },
+                { CommandEnum.Wall, _commandService.Wall }
+            };
             return dictCommands;
         }
          
