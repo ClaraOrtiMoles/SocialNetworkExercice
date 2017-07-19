@@ -12,10 +12,10 @@ This is a console-based social networking application based on Twitter satisfyin
 The first message received after run the application is a Welcome message, it gives us some instructions about how to use the application with the sintax of the commands. 
 It's very important write the command properly since the program has been focused on the "sunny day scenarios" and it returns few messages if the command is not recognized
 
-* The user will be created after the first post: To post a message we should use: <username> -> <message>. If the username doesn't exist, the program will create the user and will store the message. 
-* To read the posts of a specific user, the sintax is <username>. In case that the username doesn't exist, the program will show a message pointing out that the user doesn't exist.
-* To follow a user it's necessary write the following sintaxis: <username1> follows <username2>. In case that one of those usernames doesn't exist, the program will return a message indicating wich is the user that hasn't been reached.
-* To see the wall, meaning all the user's post and the followings' post, the sintax is: <username> wall , in case that the username doesn't exist the program will show a message. 
+* The user will be created after the first post: To post a message we should use:  username -> message . If the username doesn't exist, the program will create the user and will store the message. 
+* To read the posts of a specific user, the sintax is username . In case that the username doesn't exist, the program will show a message pointing out that the user doesn't exist.
+* To follow a user it's necessary write the following sintaxis:  username1 follows username2 . In case that one of those usernames doesn't exist, the program will return a message indicating wich is the user that hasn't been reached.
+* To see the wall, meaning all the user's post and the followings' post, the sintax is: username wall , in case that the username doesn't exist the program will show a message. 
 * To exit write: exit  
 
 ## Example 
@@ -87,7 +87,7 @@ To this purpose, the application layer uses IConsoleService, which has the four 
 * Finally, the third layer would be the data layer. This layer is in charge to execute the CRUD operations. Since this project is in memory and we are not using any storage for the data, this layer has only the methods more isolatables like getUser, createUser, userExist.  
 
 ### Open to change
-As I mentioned one of the biggest point during the development of this project has been to maintain the principle "be opened to change". Meaning in the case the application wants to add a new command, let's say "<username> unfollows <username2>". The steps would be:
+As I mentioned one of the biggest point during the development of this project has been to maintain the principle "be opened to change". Meaning in the case the application wants to add a new command, let's say " username unfollows username2 ". The steps would be:
 * Add a new enum value in CommandEnum to identify the new command, i.e. CommandEnum.UnFollow 
 * Add the key of the command into the Dictionary existing in the Service ConsoleService.cs this new key would be "unfollows" with the value of the Enum created. 
 * Add a new contract method on ICommandService that returns an string and execute a Command with the data. Obviously implement this method. 
