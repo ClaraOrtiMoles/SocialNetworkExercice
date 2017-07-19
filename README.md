@@ -64,7 +64,7 @@ Visual studio 2015 or above, .NET Framework 4.5.2, NuGet Packages v3
 
 ### Installing
 
-* Open solution **SocialNetworkExercise.sln** via Visual Studio 2017.
+* Open solution **SocialNetworkExercise.sln** via Visual Studio.
 * Set SocialNetworkExercise as **StartUp project**
 * **Build** solution: The NuGet Packages should be automatically installed or updated after the first build. 
 * **Run** the solution. In that point you could run it using the debugger (F5) or without using it (Ctrl + F5). 
