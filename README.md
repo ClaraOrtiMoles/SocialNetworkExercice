@@ -81,10 +81,10 @@ Although the main idea has been try to develop the application like it were a re
 
 ### Architecture
 From an architectural point of view, this project has "three layers" (but in order to not complicate the exercice I have maintained all the code in the application layer, but I have created three services with their contract that would identify each layer). 
-* The first layer would be the application layer. In the project, Program.cs is the main class, meaning, the point of entry. What Program.cs does is configuring all the dependencies (Configuration.cs), read and write from the console, decrypt the message from the console, and call to action.
+* The first layer would be the **application layer**. In the project, Program.cs is the main class, meaning, the point of entry. What Program.cs does is configuring all the dependencies (Configuration.cs), read and write from the console, decrypt the message from the console, and call to action.
 To this purpose, the application layer uses IConsoleService, which has the four methods: ConvertMessageToCommand, ExecuteCommand, Read and Write.
-* The second layer would be the business layer. The business layer would keep the actions that the program should do when the application commands to execute a specific command. This actions are coded on ICommandService, and basically what this service does is bringing the four commands that currently the program support: Post, Read, Follow, Write. 
-* Finally, the third layer would be the data layer. This layer is in charge to execute the CRUD operations. Since this project is in memory and we are not using any storage for the data, this layer has only the methods more isolatables like getUser, createUser, userExist.  
+* The second layer would be the **business layer**. The business layer would keep the actions that the program should do when the application commands to execute a specific command. This actions are coded on ICommandService, and basically what this service does is bringing the four commands that currently the program support: Post, Read, Follow, Write. 
+* Finally, the third layer would be the **data layer**. This layer is in charge to execute the CRUD operations. Since this project is in memory and we are not using any storage for the data, this layer has only the methods more isolatables like getUser, createUser, userExist.  
 
 ### Open to change
 As I mentioned one of the biggest point during the development of this project has been to maintain the principle "be opened to change". Meaning in the case the application wants to add a new command, let's say ``<username1> unfollows <username2>``. The steps would be:
