@@ -12,10 +12,10 @@ This is a console-based social networking application based on Twitter satisfyin
 The first message received after run the application is a Welcome message, it gives us some instructions about how to use the application with the sintax of the commands. 
 It's very important write the command properly since the program has been focused on the "sunny day scenarios" and it returns few messages if the command is not recognized
 
-* The user will be created after the first post: To post a message we should use: <username> -> <message>. If the username doesn't exist, the program will create the user and will store the message. 
-* To read the posts of a specific user, the sintax is <username>. In case that the username doesn't exist, the program will show a message pointing out that the user doesn't exist.
-* To follow a user it's necessary write the following sintaxis: <username1> follows <username2>. In case that one of those usernames doesn't exist, the program will return a message indicating wich is the user that hasn't been reached.
-* To see the wall, meaning all the user's post and the followings' post, the sintax is: <username> wall , in case that the username doesn't exist the program will show a message. 
+* The user will be created after the first post: To post a message we should use:  ``<username> -> <message>`` . If the username doesn't exist, the program will create the user and will store the message. 
+* To read the posts of a specific user, the sintax is ``<username>`` . In case that the username doesn't exist, the program will show a message pointing out that the user doesn't exist.
+* To follow a user it's necessary write the following sintaxis:  ``<username1>  follows <username2>`` . In case that one of those usernames doesn't exist, the program will return a message indicating wich is the user that hasn't been reached.
+* To see the wall, meaning all the user's post and the followings' post, the sintax is: ``<username> wall`` , in case that the username doesn't exist the program will show a message. 
 * To exit write: exit  
 
 ## Example 
@@ -64,7 +64,7 @@ Visual studio 2015 or above, .NET Framework 4.5.2, NuGet Packages v3
 
 ### Installing
 
-* Open solution **SocialNetworkExercise.sln** via Visual Studio 2017.
+* Open solution **SocialNetworkExercise.sln** via Visual Studio.
 * Set SocialNetworkExercise as **StartUp project**
 * **Build** solution: The NuGet Packages should be automatically installed or updated after the first build. 
 * **Run** the solution. In that point you could run it using the debugger (F5) or without using it (Ctrl + F5). 
@@ -81,13 +81,13 @@ Although the main idea has been try to develop the application like it were a re
 
 ### Architecture
 From an architectural point of view, this project has "three layers" (but in order to not complicate the exercice I have maintained all the code in the application layer, but I have created three services with their contract that would identify each layer). 
-* The first layer would be the application layer. In the project, Program.cs is the main class, meaning, the point of entry. What Program.cs does is configuring all the dependencies (Configuration.cs), read and write from the console, decrypt the message from the console, and call to action.
+* The first layer would be the **application layer**. In the project, Program.cs is the main class, meaning, the point of entry. What Program.cs does is configuring all the dependencies (Configuration.cs), read and write from the console, decrypt the message from the console, and call to action.
 To this purpose, the application layer uses IConsoleService, which has the four methods: ConvertMessageToCommand, ExecuteCommand, Read and Write.
-* The second layer would be the business layer. The business layer would keep the actions that the program should do when the application commands to execute a specific command. This actions are coded on ICommandService, and basically what this service does is bringing the four commands that currently the program support: Post, Read, Follow, Write. 
-* Finally, the third layer would be the data layer. This layer is in charge to execute the CRUD operations. Since this project is in memory and we are not using any storage for the data, this layer has only the methods more isolatables like getUser, createUser, userExist.  
+* The second layer would be the **business layer**. The business layer would keep the actions that the program should do when the application commands to execute a specific command. This actions are coded on ICommandService, and basically what this service does is bringing the four commands that currently the program support: Post, Read, Follow, Write. 
+* Finally, the third layer would be the **data layer**. This layer is in charge to execute the CRUD operations. Since this project is in memory and we are not using any storage for the data, this layer has only the methods more isolatables like getUser, createUser, userExist.  
 
 ### Open to change
-As I mentioned one of the biggest point during the development of this project has been to maintain the principle "be opened to change". Meaning in the case the application wants to add a new command, let's say "<username> unfollows <username2>". The steps would be:
+As I mentioned one of the biggest point during the development of this project has been to maintain the principle "be opened to change". Meaning in the case the application wants to add a new command, let's say ``<username1> unfollows <username2>``. The steps would be:
 * Add a new enum value in CommandEnum to identify the new command, i.e. CommandEnum.UnFollow 
 * Add the key of the command into the Dictionary existing in the Service ConsoleService.cs this new key would be "unfollows" with the value of the Enum created. 
 * Add a new contract method on ICommandService that returns an string and execute a Command with the data. Obviously implement this method. 
