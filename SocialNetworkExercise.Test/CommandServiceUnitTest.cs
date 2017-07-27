@@ -12,150 +12,117 @@ namespace SocialNetworkExercise.Test
     [TestClass]
     public class CommandServiceUnitTest
     {
+        Dictionary<string, User> data ;
+        string aliceUserName;
+        string message;
+        string bobUserName;
+        User userAlice;
+        User userBob;
+        IDataService dataService;
+        ICommandService commandService;
+        ConsoleService consoleService;
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            data = new Dictionary<string, User>();
+            aliceUserName = "Alice";
+            bobUserName = "Bob";
+            userAlice = new User(aliceUserName);
+            userBob = new User(bobUserName);
+            message = "I love the weather today";
+            dataService = new DataService();
+            commandService = new CommandService(dataService);
+            consoleService = new ConsoleService(commandService);
+            data.Add(aliceUserName, userAlice);
+        }
+
+
+
         [TestMethod]
         public void CommandServiceFollowing_UserNameToFollowExists_AddNewFollowingIntoUserListFollows()
-        {
-            //Arrange 
-            Dictionary<string, User> data = new Dictionary<string, User>();
-
-            string currentUserName = "Alice";
-            string userNameToFollow = "Bob";
-
-            User currentUser = new User(currentUserName);
-            User userToFollow = new User(userNameToFollow);
-
-            data.Add(currentUserName, currentUser);  
-            data.Add(userNameToFollow, userToFollow);
-
+        {  
+            data.Add(bobUserName, userBob);
+             
             Command command = new Command()
             {
                 CommandName = Models.Enums.CommandEnum.Follow,
-                Info = userNameToFollow,
-                UserName = currentUserName
-            };
-            IDataService dataService = new DataService();
-            ICommandService commandService = new CommandService(dataService);
-
-            //Action
+                Info = bobUserName,
+                UserName = aliceUserName
+            }; 
+             
             commandService.Following(command, data);
-
-            //Assert
-            Assert.IsTrue(currentUser.Following.Any(x => x.UserName == userNameToFollow));
+             
+            Assert.IsTrue(userAlice.Following.Any(x => x.UserName == bobUserName));
             
         }
 
         [TestMethod]
         public void CommandServiceFollowing_UserNameToFollowDoesntExists_DontAddUserToFollowings()
-        {
-            //Arrange 
-            Dictionary<string, User> data = new Dictionary<string, User>();
-
-            string currentUserName = "Alice";
-            string userNameToFollow = "Bob";
-
-            User currentUser = new User(currentUserName);
-            User userToFollow = new User(userNameToFollow);
-
-            data.Add(currentUserName, currentUser);
-
+        {  
             Command command = new Command()
             {
                 CommandName = Models.Enums.CommandEnum.Follow,
-                Info = userNameToFollow,
-                UserName = currentUserName
-            };
-            ICommandService commandService = new CommandService(new DataService());
+                Info = bobUserName,
+                UserName = aliceUserName
+            }; 
 
-            //Action
             commandService.Following(command, data);
-
-            //Assert
-            Assert.IsFalse(currentUser.Following.Any(x => x.UserName == userNameToFollow));
+             
+            Assert.IsFalse(userAlice.Following.Any(x => x.UserName == bobUserName));
 
         }
 
         [TestMethod]
         public void CommandServiceFollowing_AlreadyFollowingUserNameToFollow_DontAddUserToFollowings()
-        {
-            //Arrange 
-            Dictionary<string, User> data = new Dictionary<string, User>();
-
-            string currentUserName = "Alice";
-            string userNameToFollow = "Bob";
-
-            User currentUser = new User(currentUserName); 
-            User userToFollow = new User(userNameToFollow);
-            currentUser.Following.Add(userToFollow);
-
-            data.Add(currentUserName, currentUser);
-            data.Add(userNameToFollow, userToFollow);
+        { 
+            userAlice.Following.Add(userBob);  
+            data.Add(bobUserName, userBob);
 
             Command command = new Command()
             {
                 CommandName = Models.Enums.CommandEnum.Follow,
-                Info = userNameToFollow,
-                UserName = currentUserName
-            };
-            ICommandService commandService = new CommandService(new DataService());
-
-            //Action
+                Info = bobUserName,
+                UserName = aliceUserName
+            }; 
+             
             commandService.Following(command, data);
-
-            //Assert
-            Assert.IsTrue(currentUser.Following.Count(x => x.UserName == userNameToFollow) == 1);
+             
+            Assert.IsTrue(userAlice.Following.Count(x => x.UserName == bobUserName) == 1);
 
         }
 
         [TestMethod]
         public void CommandServicePosting_UserAndMessage_CreateAPostIntoUserPostLists()
-        {
-            //Arrange 
-            Dictionary<string, User> data = new Dictionary<string, User>();
-
-            string messageToPost = "I love the weather today";
-            string currentUserName = "Alice"; 
-            User currentUser = new User(currentUserName); 
-            data.Add(currentUserName, currentUser);
-
+        {    
             Command command = new Command()
             {
                 CommandName = Models.Enums.CommandEnum.Posting,
-                UserName = currentUserName,
-                Info = messageToPost
-            };
-            ICommandService commandService = new CommandService(new DataService());
-
-            //Action
+                UserName = aliceUserName,
+                Info = message
+            }; 
+             
             commandService.Posting(command, data);
-
-            //Assert
-            Assert.IsTrue(currentUser.Posts.Any(x => x.Message == messageToPost));
+             
+            Assert.IsTrue(userAlice.Posts.Any(x => x.Message == message));
 
         }
 
         [TestMethod]
         public void CommandServiceReading_UserWith1Post_ReturnStringWithPostMessageAndTimeAgo()
-        {
-            //Arrange  
-            string currentUserName = "Alice";
-            User currentUser = new User(currentUserName);
+        { 
+            Post secondPost = new Post(aliceUserName, "I love the weather today"); 
+            userAlice.Posts.Add(secondPost); 
 
-            Post secondPost = new Post(currentUserName, "I love the weather today"); 
-            currentUser.Posts.Add(secondPost); 
             Thread.Sleep(5000); 
-            Post firstPost = new Post(currentUserName, "Create Unit Test is quite complicated!");
-            currentUser.Posts.Insert(0, firstPost);
+            Post firstPost = new Post(aliceUserName, "Create Unit Test is quite complicated!");
+            userAlice.Posts.Insert(0, firstPost);
 
             Command command = new Command()
             {
                 CommandName = Models.Enums.CommandEnum.Reading,
-                UserName = currentUserName
-            };
-            Dictionary<string, User> data = new Dictionary<string, User>
-            {
-                { currentUserName, currentUser }
-            };
-            ICommandService commandService = new CommandService(new DataService());
+                UserName = aliceUserName
+            };  
 
             //Action
             var result = commandService.Reading(command, data);
@@ -172,26 +139,18 @@ namespace SocialNetworkExercise.Test
 
         [TestMethod]
         public void CommandServiceReading_UserWith2Post_ReturnStringWithTwoPostMessageAndTimeAgo()
-        {  
-            //Arrange  
-            string currentUserName = "Alice";
-            User currentUser = new User(currentUserName);
-            Post onePost = new Post(currentUserName, "I love the weather today");
-            currentUser.Posts.Add(onePost);
-            Post otherPost = new Post(currentUserName, "I am enjoying with my exercise!");
-            currentUser.Posts.Add(otherPost);
-
-            Dictionary<string, User> data = new Dictionary<string, User>
-            {
-                { currentUserName, currentUser }
-            };
+        {   
+            Post onePost = new Post(aliceUserName, "I love the weather today");
+            userAlice.Posts.Add(onePost);
+            Post otherPost = new Post(aliceUserName, "I am enjoying with my exercise!");
+            userAlice.Posts.Add(otherPost);
+             
             Command command = new Command()
             {
-                UserName = currentUserName,
+                UserName = aliceUserName,
                 CommandName = Models.Enums.CommandEnum.Reading
-            };
-            ICommandService commandService = new CommandService(new DataService());
-
+            };  
+            
             //Action
             var result = commandService.Reading(command, data);
 
@@ -204,23 +163,13 @@ namespace SocialNetworkExercise.Test
 
         [TestMethod]
         public void CommandServiceReading_UserWithoutPosts_ReturnStringEmpty()
-        {
-            //Arrange  
-            string currentUserName = "Alice";
-            User currentUser = new User(currentUserName);
-
+        { 
             Command command = new Command()
             {
-                UserName = currentUserName,
+                UserName = aliceUserName,
                 CommandName = Models.Enums.CommandEnum.Reading
-            };
-            Dictionary<string, User> data = new Dictionary<string, User>
-            {
-                { currentUserName, currentUser }
-            };
-
-            ICommandService commandService = new CommandService(new DataService());
-
+            }; 
+             
             //Action
             var result = commandService.Reading(command, data);
 
@@ -231,39 +180,31 @@ namespace SocialNetworkExercise.Test
 
         [TestMethod]
         public void CommandServiceWall_UserWithOnePostAndFollowingTwoUsersWithOnePost_ReturnThreePostsOrderingByTime()
-        {
-            string currentUserName = "Alice";
-            User currentUser = new User(currentUserName);
-            Post onePost = new Post(currentUserName, "I love the weather today"); 
-            currentUser.Posts.Add(onePost);
+        { 
+            Post onePost = new Post(aliceUserName, "I love the weather today"); 
+            userAlice.Posts.Add(onePost);
            
-            Thread.Sleep(1000);
-            string followName = "Bob";
-            User followingUser = new User(followName);
-            Post followingPost = new Post(followName, "I am enjoying with my exercise!");
-            followingUser.Posts.Add(followingPost);
+            Thread.Sleep(1000); 
+            Post followingPost = new Post(bobUserName, "I am enjoying with my exercise!");
+            userBob.Posts.Add(followingPost);
 
             Thread.Sleep(1000);
             string followOtherUserName = "Clara";
             User followingOtherUser = new User(followOtherUserName);
             Post followingOtherPost = new Post(followOtherUserName, "Create Unit Test is quite complicated!");
             followingOtherUser.Posts.Add(followingOtherPost);
-             
-            currentUser.Following.Add(followingUser);
-            currentUser.Following.Add(followingOtherUser);
 
-            Dictionary<string, User> data = new Dictionary<string, User>
-            {
-                { currentUserName, currentUser },
-                { followName, followingUser },
-                { followOtherUserName, followingOtherUser }
-            };
+            userAlice.Following.Add(userBob);
+            userAlice.Following.Add(followingOtherUser);
+
+            data.Add(followOtherUserName, followingOtherUser);
+            data.Add(bobUserName, userBob);
+          
             Command command = new Command()
             {
                 CommandName = Models.Enums.CommandEnum.Wall,
-                UserName = currentUserName
-            };
-            ICommandService commandService = new CommandService(new DataService());
+                UserName = aliceUserName
+            }; 
 
             //Action
             var result = commandService.Wall(command, data);
@@ -278,8 +219,8 @@ namespace SocialNetworkExercise.Test
 
             Assert.AreEqual(result, 
                 $"{followOtherUserName} - Create Unit Test is quite complicated! ({nSecondsFollowingOtherUser} {unitsSecondsFollowingOtherUser} ago)" +
-                $"\n{followName} - I am enjoying with my exercise! ({nSecondsFollowingUser} {unitsSecondsFollowingUser} ago)" + 
-                $"\n{currentUserName} - I love the weather today ({nSecondsCurrentUser} {unitsCurrentUser} ago)");
+                $"\n{bobUserName} - I am enjoying with my exercise! ({nSecondsFollowingUser} {unitsSecondsFollowingUser} ago)" + 
+                $"\n{aliceUserName} - I love the weather today ({nSecondsCurrentUser} {unitsCurrentUser} ago)");
 
 
         }
